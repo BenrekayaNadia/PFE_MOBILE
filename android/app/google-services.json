@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1045084690132",
+    "project_id": "proxymfithub",
+    "storage_bucket": "proxymfithub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045084690132:android:21cedc75ffa1545cd04d41",
+        "android_client_info": {
+          "package_name": "com.coach_privee_front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLivborQTx4Hn50WptgBe8ohPc6HQv_Hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

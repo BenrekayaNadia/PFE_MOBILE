@@ -1,114 +1,86 @@
-import { ApplicationScreenProps } from '@/types/navigation';
-import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, FlatList } from "react-native";
+import PriceCard from "@/components/PriceCard"; // Adjust the import according to your file structure
+import PackService from "@/services/PackService"; // Adjust the import according to your file structure
 
 interface IPrice {
-  title: string;
-  price: number;
-  trainees: number;
+  id: number;
+  nom: string;
+  description: string;
+  prix: number;
 }
 
-const PricingCard: React.FC<IPrice> = ({ title, price, trainees }) => {
+function PricingScreen() {
+  const [packs, setPacks] = useState<IPrice[]>([]);
+
+  useEffect(() => {
+    const fetchPacks = async () => {
+      try {
+        const data = await PackService.getAllPacks();
+        setPacks(data);
+      } catch (error) {
+        console.error("Error fetching packs:", error);
+      }
+    };
+
+    fetchPacks();
+  }, []);
+
   return (
-    <View style={styles.cardContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.price}>
-        ${price} <Text style={styles.monthly}>/ month</Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>GET UNLIMITED ACCESS</Text>
+      <Text style={styles.description}>
+        When you subscribe, you’ll get instant unlimited access
       </Text>
-      <Text style={styles.trainees}>Up to {trainees} trainees</Text>
-      
+      <FlatList
+        data={packs}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.cardWrapper}>
+            <PriceCard pack={item} />
+          </View>
+        )}
+        contentContainerStyle={styles.listContainer}
+      />
     </View>
   );
-};
-
-
-function PricingScreen({ navigation}: ApplicationScreenProps) {
-  const freePlan: IPrice = { title: 'Free', price: 0, trainees: 6 };
-  const monthlyPlan10: IPrice = { title: 'Monthly', price: 25, trainees: 10 };
-  const monthlyPlan20: IPrice = { title: 'Monthly', price: 12.99, trainees: 20 };
-
-  return (
-    
-    <View style={styles.container}>
-    <Text style={styles.heading}>GET UNLIMITED ACCESS</Text>
-    <Text style={styles.description}>
-    When you subscribe, you’ll get
-    instant unlimited access
-    </Text>
-    <View style={styles.background} />
-    <PricingCard {...freePlan} />
-    <View style={styles.spacing} />
-    <PricingCard {...monthlyPlan10} />
-    <View style={styles.spacing} />
-    <PricingCard {...monthlyPlan20} />
-    <View style={styles.spacing} />
-    <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Subscribe Now</Text>
-    </TouchableOpacity>
-  </View>
-  );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#fff', // Background color with opacity
-    zIndex: -1, // Push the background behind other content
-  },
-  cardContainer: {
-    backgroundColor: '#CC8FED',
-    borderRadius:30,
-    padding: 2,
-    alignItems: 'center',
-    width: '80%',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  price: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  monthly: {
-    fontSize: 14,
-    marginLeft: 4,
-  },
-  trainees: {
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#f194ff',
-    padding: 12,
-    borderRadius: 5,
-    marginTop:16
-
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  spacing: {
-    marginBottom: 20,
+    flex: 2,
+    //justifyContent: "center",
+    //alignItems: "center",
+    //backgroundColor: "#f8f9fa", // Light background color
+    padding: 20,
   },
   heading: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    marginTop: 10,
+    textAlign: "center",
+    color: "#333", // Darker text color
   },
   description: {
     fontSize: 14,
     textAlign: "center",
     marginBottom: 20,
+    color: "#666", // Medium-dark text color
+  },
+   listContainer: {
+    //alignItems: "center",
+    width: "100%", // Ensure the list takes full width
+  }, 
+  cardWrapper: {
+    padding: 5,
+    marginBottom: 20,
+    backgroundColor: "#fff", // White background color
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

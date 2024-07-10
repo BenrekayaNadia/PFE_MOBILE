@@ -1,5 +1,5 @@
-import React from 'react';
-import { ListItem, Avatar, Icon, Text } from 'react-native-elements';
+import React from "react";
+import { ListItem, Avatar, Icon, Text } from "react-native-elements";
 
 interface WorkoutScheduleProps {
   workout: {
